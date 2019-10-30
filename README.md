@@ -1,2 +1,4 @@
-# fingerprint-rules
-Fingerprinting Rules for Suricata
+__fingerprint-rules__
+
+Fingerprinting signatures and rules for Suricata.  Suricon 2019.
+

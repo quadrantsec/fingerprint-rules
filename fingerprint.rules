@@ -1,0 +1,693 @@
+# Suricata fingerprint.rules
+# Copyright (c) 2009-2019. Quadrant Information Security <www.quadrantsec.com>
+# All rights reserved.
+#
+#
+#*************************************************************
+#  Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
+#  following conditions are met:
+#
+#  * Redistributions of source code must retain the above copyright notice, this list of conditions and the following
+#    disclaimer.
+#  * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the
+#    following disclaimer in the documentation and/or other materials provided with the distribution.
+#  * Neither the name of the nor the names of its contributors may be used to endorse or promote products derived
+#    from this software without specific prior written permission.
+#
+#  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS AS IS AND ANY EXPRESS OR IMPLIED WARRANTIES,
+#  INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+#  DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+#  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+#  SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+#  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
+#  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+#*************************************************************
+
+alert http $HOME_NET any -> any any (msg:"Windows User Agent "; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Windows NT"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os windows, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000003; rev:4;)
+
+alert http $HOME_NET any -> any any (msg:"Ubuntu User Agent "; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Ubuntu"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os linux, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000004; rev:4;)
+
+alert http $HOME_NET any -> any any (msg:"Mac OS User Agent "; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Mac OS"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os osx, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000005; rev:4;)
+
+alert http $HOME_NET any -> any any (msg:"Linux User Agent "; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Linux"; content: !"Ubuntu"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os linux, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000006; rev:4;)
+
+alert http $HOME_NET any -> any any (msg:"Firefox User Agent "; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Firefox"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000007; rev:4;)
+
+#alert http $HOME_NET any -> any any (msg:"Opera User Agent "; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Opera"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client classtype:fingerprint; sid:11000008; rev:4;)
+
+alert http $HOME_NET any -> any any (msg:"iPhone User Agent "; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "iPhone"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os osx, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000009; rev:4;)
+
+alert http $HOME_NET any -> any any (msg:"iPad User Agent "; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "iPad"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os osx, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000010; rev:4;)
+
+alert http $HOME_NET any -> any any (msg:"Internet Explorer User Agent "; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Trident"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os windows, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000011; rev:4;)
+
+alert http $HOME_NET any -> any any (msg:"Google Chrome User Agent "; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Chrome"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000012; rev:4;)
+
+alert http $HOME_NET any -> any any (msg:"Android User Agent "; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Android"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os linux, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000013; rev:4;)
+
+alert http $HOME_NET any -> any any (msg:"Chrome OS User Agent "; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "CrOS"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os linux, fingerprint_type client;  classtype:fingerprint; sid:11000014; rev:4;)
+
+alert http $HOME_NET any -> any any (msg:"Windows Phone User Agent "; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Windows Phone"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os windows, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000015; rev:4;)
+
+alert ip $HOME_NET any -> any 5353 (msg:"Windows 10 No Machine "; flow:established,to_server; content:"OS=Windows 10"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os windows, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000016; rev:1;)
+
+alert ip $HOME_NET 5353 -> any 5353 (msg:"Windows Server No Machine "; flow:established,to_server; content:"OS=Windows Server"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os windows, fingerprint_type server, fingerprint_expire 86400; classtype:fingerprint; sid:11000017; rev:1;)
+
+alert ip $HOME_NET 5353 -> any 5353 (msg:"Ubuntu 18.04 No Machine "; flow:established,to_server; content:"OS=Ubuntu 18.04"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os linux, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000018; rev:1;)
+
+alert ip $HOME_NET 5353 -> any 5353 (msg:"Ubuntu 16.04 No Machine "; flow:established,to_server; content:"OS=Ubuntu 16.04"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os linux, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000019; rev:1;)
+alert tcp $HOME_NET 1433 -> any any (msg:"MSSQL Server "; flow:established,to_client; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os windows, fingerprint_type server, fingerprint_expire 86400; classtype:fingerprint; sid:11000020; rev:1;)
+
+alert tcp $HOME_NET 3306 -> any any (msg:"MySQL Server "; flow:established,to_client; content:"SMB@"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os windows, fingerprint_type server, fingerprint_expire 86400; classtype:fingerprint; sid:11000021; rev:1;)
+
+alert ip $HOME_NET 445 -> any any (msg:"SMB server "; flow:established,to_client; content:"SMB@"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type server, fingerprint_expire 86400; classtype:fingerprint; sid:11000022; rev:1;)
+
+alert ip $HOME_NET any -> any 7080 (msg:"Jabber 12 for Windows "; content:"User-Agent|3a| "; content: "Jabber/12"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os windows, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000023; rev:1;)
+
+alert ip $HOME_NET any -> any 7080 (msg:"Jabber 11 for Windows "; content:"User-Agent|3a| "; content: "Jabber/11"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os windows, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000024; rev:1;)
+
+alert ip $HOME_NET any -> any 7080 (msg:"Jabber 10 for Windows "; content:"User-Agent|3a| "; content: "Jabber/10"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os windows, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000025; rev:1;)
+
+alert ip $HOME_NET 7080 -> any any (msg:"Jabber server "; content:"Server|3a| Jetty"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type server, fingerprint_expire 86400; classtype:fingerprint; sid:11000026; rev:1;)
+
+alert ip $HOME_NET 5060 -> any any (msg:"Cisco Unified Communications Manager 12.5 SIP server "; flow:established,to_client; content:"Server|3A| Cisco-CUCM12.5"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type server, fingerprint_expire 86400; classtype:fingerprint; sid:11000027; rev:1;)
+
+alert ip $HOME_NET 5060 -> any any (msg:"Cisco Unified Communications Manager 12.0 SIP server "; flow:established,to_client; content:"Server|3A| Cisco-CUCM12.0"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type server, fingerprint_expire 86400; classtype:fingerprint; sid:11000028; rev:1;)
+
+alert ip $HOME_NET 5060 -> any any (msg:"Cisco Unified Communications Manager 11.5 SIP server "; flow:established,to_client; content:"Server|3A| Cisco-CUCM11.5"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type server, fingerprint_expire 86400; classtype:fingerprint; sid:11000029; rev:1;)
+
+alert ip $HOME_NET 5060 -> any any (msg:"Cisco Unified Communications Manager 11.0 SIP server "; flow:established,to_client; content:"Server|3A| Cisco-CUCM11.0"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type server, fingerprint_expire 86400; classtype:fingerprint; sid:11000030; rev:1;)
+
+alert ip $HOME_NET 5060 -> any any (msg:"Cisco Unified Communications Manager 10 SIP server "; flow:established,to_client; content:"Server|3A| Cisco-CUCM10"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type server, fingerprint_expire 86400; classtype:fingerprint; sid:11000031; rev:1;)
+
+alert ip $HOME_NET any -> any 5060 (msg:"Cisco Unified IP phone 9951 "; content:"User-Agent|3a| "; content: "Cisco-CP9951"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000032; rev:1;)
+
+alert ip $HOME_NET any -> any 5060 (msg:"Cisco Unified IP phone 9971 "; flow:established,to_server; content:"User-Agent|3a| "; content: "Cisco-CP9971"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000033; rev:1;)
+
+alert ip $HOME_NET any -> any 5060 (msg:"Cisco Unified IP phone 8961 "; flow:established,to_server; content:"User-Agent|3a| "; content: "Cisco-CP8961"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000034; rev:1;)
+
+alert ip $HOME_NET any -> 224.0.0.10 any (msg:"EIGRP Router Broadcast IP "; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000035; rev:1;)
+
+alert ip $HOME_NET any -> 224.0.0.18 any (msg:"VRRP Router Broadcast IP "; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000036; rev:1;)
+
+alert ip $HOME_NET any -> [224.0.0.5,224.0.0.6,224.0.0.24] any (msg:"OSPF Router Broadcast IP "; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000037; rev:1;)
+
+alert ip $HOME_NET any -> 224.0.0.251 5353 (msg:"Chromecast Broadcast IP "; content:"googlecast"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000038; rev:1;)
+
+alert http $HOME_NET 80 -> any any (msg:"Apache 2.4 web server "; flow:established,to_client; content:"Server|3A| Apache/2.4.10 (Debian)"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os linux, fingerprint_type server, fingerprint_expire 86400; classtype:fingerprint; sid:11000039; rev:1;)
+
+alert http $HOME_NET 80 -> any any (msg:"Microsoft IIS 10 web server "; flow:established,to_client; content:"Server|3A| Microsoft-IIS/10"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os windows, fingerprint_type server, fingerprint_expire 86400; classtype:fingerprint; sid:11000040; rev:1;)
+
+alert http $HOME_NET 80 -> any any (msg:"Microsoft IIS 8.5 web server "; flow:established,to_client; content:"Server|3A| Microsoft-IIS/8.5"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os windows, fingerprint_type server, fingerprint_expire 86400; classtype:fingerprint; sid:11000041; rev:1;)
+
+alert http $HOME_NET 80 -> any any (msg:"Microsoft IIS 8.0 web server "; flow:established,to_client; content:"Server|3A| Microsoft-IIS/8.0"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os windows, fingerprint_type server, fingerprint_expire 86400; classtype:fingerprint; sid:11000042; rev:1;)
+
+alert http $HOME_NET 80 -> any any (msg:"Microsoft IIS 7.5 web server "; flow:established,to_client; content:"Server|3A| Microsoft-IIS/7.5"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os windows, fingerprint_type server, fingerprint_expire 86400; classtype:fingerprint; sid:11000043; rev:1;)
+
+alert http $HOME_NET 80 -> any any (msg:"Microsoft IIS 7.0 web server "; flow:established,to_client; content:"Server|3A| Microsoft-IIS/7.0"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os windows, fingerprint_type server, fingerprint_expire 86400; classtype:fingerprint; sid:11000044; rev:1;)
+
+alert ip $HOME_NET any -> any any (msg:"nginx/1.0.15 server "; flow:established,to_client; content:"Server|3A| nginx/1.0.15"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os linux, fingerprint_type server, fingerprint_expire 86400; classtype:fingerprint; sid:11000045; rev:1;)
+
+alert ip $HOME_NET any -> any any (msg:"nginx/1.10.2 server "; flow:established,to_client; content:"Server|3A| nginx/1.10.2"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os linux, fingerprint_type server, fingerprint_expire 86400; classtype:fingerprint; sid:11000046; rev:1;)
+
+alert ip $HOME_NET any -> any any (msg:"nginx/1.10.3 server "; flow:established,to_client; content:"Server|3A| nginx/1.10.3"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os linux, fingerprint_type server, fingerprint_expire 86400; classtype:fingerprint; sid:11000047; rev:1;)
+
+alert ip $HOME_NET any -> any any (msg:"nginx/1.12.2 server "; flow:established,to_client; content:"Server|3A| nginx/1.12.2"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os linux, fingerprint_type server, fingerprint_expire 86400; classtype:fingerprint; sid:11000048; rev:1;)
+
+alert ip $HOME_NET any -> any any (msg:"nginx/1.14.1 server "; flow:established,to_client; content:"Server|3A| nginx/1.14.1"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os linux, fingerprint_type server, fingerprint_expire 86400; classtype:fingerprint; sid:11000049; rev:1;)
+
+alert ip $HOME_NET any -> any any (msg:"nginx/1.15.8 server "; flow:established,to_client; content:"Server|3A| nginx/1.15.8"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os linux, fingerprint_type server, fingerprint_expire 86400; classtype:fingerprint; sid:11000050; rev:1;)
+
+alert ip $HOME_NET any -> any any (msg:"nginx/1.16.1 server "; flow:established,to_client; content:"Server|3A| nginx/1.16.1"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os linux, fingerprint_type server, fingerprint_expire 86400; classtype:fingerprint; sid:11000051; rev:1;)
+
+alert ip $HOME_NET any -> any any (msg:"nginx/1.17.3 server "; flow:established,to_client; content:"Server|3A| nginx/1.17.3"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os linux, fingerprint_type server, fingerprint_expire 86400; classtype:fingerprint; sid:11000052; rev:1;)
+
+alert ip $HOME_NET any -> any any (msg:"nginx/1.8.0 server "; flow:established,to_client; content:"Server|3A| nginx/1.8.0"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os linux, fingerprint_type server, fingerprint_expire 86400; classtype:fingerprint; sid:11000053; rev:1;)
+
+alert ip $HOME_NET any -> any any (msg:"nginx/1.9.5 server "; flow:established,to_client; content:"Server|3A| nginx/1.9.5"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os linux, fingerprint_type server, fingerprint_expire 86400; classtype:fingerprint; sid:11000054; rev:1;)
+
+alert ip $HOME_NET any -> any any (msg:"Phusion Passenger 5.0.30 server "; flow:established,to_client; content:"Server|3A| "; content:"Phusion Passenger 5.0.30"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os linux, fingerprint_type server, fingerprint_expire 86400; classtype:fingerprint; sid:11000055; rev:1;)
+
+alert ip $HOME_NET any -> any any (msg:"Phusion Passenger 5.2.0 server "; flow:established,to_client; content:"Server|3A| "; content:"Phusion Passenger 5.2.0"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os linux, fingerprint_type server, fingerprint_expire 86400; classtype:fingerprint; sid:11000056; rev:1;)
+
+alert ip $HOME_NET any -> any any (msg:"Phusion Passenger 5.2.1 server "; flow:established,to_client; content:"Server|3A| "; content:"Phusion Passenger 5.2.1"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os linux, fingerprint_type server, fingerprint_expire 86400; classtype:fingerprint; sid:11000057; rev:1;)
+
+alert ip $HOME_NET any -> any any (msg:"Phusion Passenger 5.2.2 server "; flow:established,to_client; content:"Server|3A| "; content:"Phusion Passenger 5.2.2"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os linux, fingerprint_type server, fingerprint_expire 86400; classtype:fingerprint; sid:11000058; rev:1;)
+
+alert ip $HOME_NET any -> any any (msg:"Phusion Passenger 5.2.3 server "; flow:established,to_client; content:"Server|3A| "; content:"Phusion Passenger 5.2.3"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os linux, fingerprint_type server, fingerprint_expire 86400; classtype:fingerprint; sid:11000059; rev:1;)
+
+alert ip $HOME_NET any -> any any (msg:"Phusion Passenger 5.3.0 server "; flow:established,to_client; content:"Server|3A| "; content:"Phusion Passenger 5.3.0"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os linux, fingerprint_type server, fingerprint_expire 86400; classtype:fingerprint; sid:11000060; rev:1;)
+
+alert ip $HOME_NET any -> any any (msg:"Phusion Passenger 5.3.1 server "; flow:established,to_client; content:"Server|3A| "; content:"Phusion Passenger 5.3.1"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os linux, fingerprint_type server, fingerprint_expire 86400; classtype:fingerprint; sid:11000061; rev:1;)
+
+alert ip $HOME_NET any -> any any (msg:"Phusion Passenger 5.3.2 server "; flow:established,to_client; content:"Server|3A| "; content:"Phusion Passenger 5.3.2"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os linux, fingerprint_type server, fingerprint_expire 86400; classtype:fingerprint; sid:11000062; rev:1;)
+
+alert ip $HOME_NET any -> any any (msg:"Phusion Passenger 5.3.3 server "; flow:established,to_client; content:"Server|3A| "; content:"Phusion Passenger 5.3.3"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os linux, fingerprint_type server, fingerprint_expire 86400; classtype:fingerprint; sid:11000063; rev:1;)
+
+alert ip $HOME_NET any -> any any (msg:"Phusion Passenger 5.3.4 server "; flow:established,to_client; content:"Server|3A| "; content:"Phusion Passenger 5.3.4"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os linux, fingerprint_type server, fingerprint_expire 86400; classtype:fingerprint; sid:11000064; rev:1;)
+
+alert ip $HOME_NET any -> any any (msg:"Phusion Passenger 5.3.5 server "; flow:established,to_client; content:"Server|3A| "; content:"Phusion Passenger 5.3.5"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os linux, fingerprint_type server, fingerprint_expire 86400; classtype:fingerprint; sid:11000065; rev:1;)
+
+alert ip $HOME_NET any -> any any (msg:"Phusion Passenger 5.3.6 server "; flow:established,to_client; content:"Server|3A| "; content:"Phusion Passenger 5.3.6"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os linux, fingerprint_type server, fingerprint_expire 86400; classtype:fingerprint; sid:11000066; rev:1;)
+
+alert ip $HOME_NET any -> any any (msg:"Phusion Passenger 5.3.7 server "; flow:established,to_client; content:"Server|3A| "; content:"Phusion Passenger 5.3.7"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os linux, fingerprint_type server, fingerprint_expire 86400; classtype:fingerprint; sid:11000067; rev:1;)
+
+alert ip $HOME_NET any -> any any (msg:"Phusion Passenger 6.0.1 server "; flow:established,to_client; content:"Server|3A| "; content:"Phusion Passenger 6.0.1"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os linux, fingerprint_type server, fingerprint_expire 86400; classtype:fingerprint; sid:11000068; rev:1;)
+
+alert ip $HOME_NET any -> any any (msg:"Phusion Passenger 6.0.2 server "; flow:established,to_client; content:"Server|3A| "; content:"Phusion Passenger 6.0.2"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os linux, fingerprint_type server, fingerprint_expire 86400; classtype:fingerprint; sid:11000069; rev:1;)
+
+alert ip $HOME_NET any -> any any (msg:"Phusion Passenger 6.0.3 server "; flow:established,to_client; content:"Server|3A| "; content:"Phusion Passenger 6.0.3"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os linux, fingerprint_type server, fingerprint_expire 86400; classtype:fingerprint; sid:11000070; rev:1;)
+
+alert ip $HOME_NET any -> any any (msg:"Phusion Passenger 6.0.4 server "; flow:established,to_client; content:"Server|3A| "; content:"Phusion Passenger 6.0.4"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os linux, fingerprint_type server, fingerprint_expire 86400; classtype:fingerprint; sid:11000071; rev:1;)
+
+alert ip $HOME_NET any -> any any (msg:"AmazonS3 server "; flow:established,to_client; content:"Server|3A| AmazonS3"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type server, fingerprint_expire 86400; classtype:fingerprint; sid:11000072; rev:1;)
+
+alert ip $HOME_NET 80 -> any any (msg:"CANON HTTP Server server "; flow:established,to_client; content:"Server|3A| CANON HTTP Server"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type server, fingerprint_expire 86400; classtype:fingerprint; sid:11000073; rev:1;)
+
+alert ip $HOME_NET any -> any any (msg:"HPLaserJet 2300 Series Printer server "; flow:established,to_client; content:"Server|3A| HP-ChaiServer/3.0"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type server, fingerprint_expire 86400; classtype:fingerprint; sid:11000074; rev:1;)
+
+alert ip $HOME_NET any -> any any (msg:"AppDynamics server "; flow:established,to_client; content:"Server|3A| AppDynamics"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type server, fingerprint_expire 86400; classtype:fingerprint; sid:11000075; rev:1;)
+
+alert ip $HOME_NET any -> any any (msg:"Apache Traffic server "; flow:established,to_client; content:"Server|3A| ATS"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os linux, fingerprint_type server, fingerprint_expire 86400; classtype:fingerprint; sid:11000076; rev:1;)
+
+alert ip $HOME_NET any -> any any (msg:"Apache Traffic server 8.0.5 "; flow:established,to_client; content:"Server|3A| ATS/8.0.5"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os linux, fingerprint_type server, fingerprint_expire 86400; classtype:fingerprint; sid:11000077; rev:1;)
+
+alert ip $HOME_NET any -> any any (msg:"Apache Traffic server 7.1.8 "; flow:established,to_client; content:"Server|3A| ATS/7.1.8"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os linux, fingerprint_type server, fingerprint_expire 86400; classtype:fingerprint; sid:11000078; rev:1;)
+
+alert ip $HOME_NET any -> any any (msg:"Apache Traffic server 6.2.3 "; flow:established,to_client; content:"Server|3A| ATS/6.2.3"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os linux, fingerprint_type server, fingerprint_expire 86400; classtype:fingerprint; sid:11000079; rev:1;)
+
+alert ip $HOME_NET any -> any any (msg:"AWS Elastic Load Balancing "; flow:established,to_client; content:"Server|3A| awselb/2.0"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type server, fingerprint_expire 86400; classtype:fingerprint; sid:11000080; rev:1;)
+
+alert ip $HOME_NET any -> any any (msg:"Big-IP Load Balancing "; flow:established,to_client; content:"Server|3A| BigIP"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type server, fingerprint_expire 86400; classtype:fingerprint; sid:11000081; rev:1;)
+
+alert ip $HOME_NET 80 -> any any (msg:"Cowboy Web server "; flow:established,to_client; content:"Server|3A| Cowboy"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type server, fingerprint_expire 86400; classtype:fingerprint; sid:11000082; rev:1;)
+
+alert ip $HOME_NET any -> any any (msg:"GlassFish Open Source server 4.1.2 "; flow:established,to_client; content:"Server|3A| GlassFish Server Open Source Edition  4.1.2"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os windows, fingerprint_type server, fingerprint_expire 86400; classtype:fingerprint; sid:11000083; rev:1;)
+
+alert ip $HOME_NET any -> any any (msg:"Trendmicro Officescan server "; flow:established,to_client; content:"Server|3A| OfficeScan Client"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type server, fingerprint_expire 86400; classtype:fingerprint; sid:11000084; rev:1;)
+
+alert ip $HOME_NET any -> any any (msg:" Openresty server "; flow:established,to_client; content:"Server|3A| openresty"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type server, fingerprint_expire 86400; classtype:fingerprint; sid:11000085; rev:1;)
+
+alert ip $HOME_NET any -> any any (msg:"nginx server "; flow:established,to_client; content:"Server|3A| nginx"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os linux, fingerprint_type server, fingerprint_expire 86400; classtype:fingerprint; sid:11000086; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Moto G 5 Plus"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"moto g5 plus"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000087; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Moto z3"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"moto z3"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os windows, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000088; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Puffin 3 Web Browser"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:" Puffin/3"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os windows, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000089; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"iPhone 7"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"iPhone7"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os ios, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000090; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"iPhone 8"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"iPhone8"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os ios, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000091; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"iPhone 9"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"iPhone9"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os ios, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000092; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"iPhone 10"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"iPhone10"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os ios, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000093; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"iPhone 11"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"iPhone11"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os ios, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000094; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"iPad 5"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"iPad5"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os ios, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000095; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"iPad 7"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"iPad7"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os ios, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000096; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Android Nougat OS"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"Android 7"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000097; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Android Lollipop OS"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"Android 5"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000098; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Android Marshmallow OS"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"Android 6"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000099; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Android Oreo OS"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"Android 8"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000100; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Android Pie OS"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"Android 9"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000101; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Android 10 OS"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"Android 10"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000102; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Google Chrome Version 35"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Chrome/35"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000103; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Google Chrome Version 36"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Chrome/36"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000104; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Google Chrome Version 37"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Chrome/37"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000105; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Google Chrome Version 38"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Chrome/38"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000106; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Google Chrome Version 39"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Chrome/39"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000107; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Google Chrome Version 40"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Chrome/40"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000108; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Google Chrome Version 41"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Chrome/41"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000109; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Google Chrome Version 42"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Chrome/42"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000110; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Google Chrome Version 43"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Chrome/43"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000111; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Google Chrome Version 44"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Chrome/44"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000112; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Google Chrome Version 45"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Chrome/45"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000113; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Google Chrome Version 46"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Chrome/46"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000114; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Google Chrome Version 47"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Chrome/47"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000115; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Google Chrome Version 48"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Chrome/48"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000116; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Google Chrome Version 49"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Chrome/49"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000117; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Google Chrome Version 50"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Chrome/50"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000118; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Google Chrome Version 51"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Chrome/51"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000119; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Google Chrome Version 52"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Chrome/52"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000120; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Google Chrome Version 53"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Chrome/53"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000121; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Google Chrome Version 54"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Chrome/54"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000122; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Google Chrome Version 55"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Chrome/55"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000123; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Google Chrome Version 56"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Chrome/56"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000124; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Google Chrome Version 57"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Chrome/57"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000125; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Google Chrome Version 58"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Chrome/58"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000126; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Google Chrome Version 59"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Chrome/59"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000127; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Google Chrome Version 60"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Chrome/60"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000128; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Google Chrome Version 61"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Chrome/61"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000129; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Google Chrome Version 62"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Chrome/62"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000130; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Google Chrome Version 63"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Chrome/63"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000131; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Google Chrome Version 64"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Chrome/64"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000132; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Google Chrome Version 65"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Chrome/65"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000133; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Google Chrome Version 66"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Chrome/66"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000134; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Google Chrome Version 67"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Chrome/67"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000135; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Google Chrome Version 68"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Chrome/68"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000136; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Google Chrome Version 69"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Chrome/69"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000137; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Google Chrome Version 70"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Chrome/70"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000138; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Google Chrome Version 71"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Chrome/71"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000139; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Google Chrome Version 72"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Chrome/72"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000140; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Google Chrome Version 73"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Chrome/73"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000141; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Google Chrome Version 74"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Chrome/74"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000142; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Google Chrome Version 75"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Chrome/75"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000143; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Google Chrome Version 76"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Chrome/76"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000144; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Google Chrome Version 77"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Chrome/77"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000145; rev:1;)
+
+
+alert http $HOME_NET any -> any any (msg:"Google Chrome Version 79"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Chrome/79"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000146; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Firefox Version 35"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Firefox/35"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000147; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Firefox Version 36"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Firefox/36"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000148; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Firefox Version 37"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Firefox/37"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000149; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Firefox Version 38"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Firefox/38"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000150; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Firefox Version 39"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Firefox/39"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000151; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Firefox Version 40"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Firefox/40"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000152; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Firefox Version 41"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Firefox/41"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000153; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Firefox Version 42"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Firefox/42"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000154; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Firefox Version 43"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Firefox/43"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000155; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Firefox Version 44"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Firefox/44"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000156; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Firefox Version 45"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Firefox/45"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000157; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Firefox Version 46"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Firefox/46"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000158; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Firefox Version 47"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Firefox/47"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000159; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Firefox Version 48"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Firefox/48"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000160; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Firefox Version 49"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Firefox/49"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000161; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Firefox Version 50"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Firefox/50"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000162; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Firefox Version 51"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Firefox/51"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000163; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Firefox Version 52"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Firefox/52"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000164; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Firefox Version 53"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Firefox/53"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000165; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Firefox Version 54"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Firefox/54"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000166; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Firefox Version 55"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Firefox/55"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000167; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Firefox Version 56"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Firefox/56"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000168; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Firefox Version 57"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Firefox/57"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000169; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Firefox Version 58"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Firefox/58"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000170; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Firefox Version 59"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Firefox/59"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000171; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Firefox Version 60"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Firefox/60"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000172; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Firefox Version 61"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Firefox/61"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000173; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Firefox Version 62"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Firefox/62"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000174; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Firefox Version 63"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Firefox/63"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000175; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Firefox Version 64"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Firefox/64"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000176; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Firefox Version 65"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Firefox/65"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000177; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Firefox Version 66"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Firefox/66"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000178; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Firefox Version 67"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Firefox/67"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000179; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Firefox Version 68"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Firefox/68"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000180; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Firefox Version 69"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Firefox/69"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000181; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Firefox Version 70"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Firefox/70"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000182; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Internet Explorer 2.0"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"MSIE 2.0"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os windows, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000183; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Internet Explorer 3.0"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"MSIE 3.0"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os windows, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000184; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Internet Explorer 3.0B"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"MSIE 3.0B"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os windows, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000185; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Internet Explorer 3.01"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"MSIE 3.01"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os windows, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000186; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Internet Explorer 3.02"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"MSIE 3.02"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os windows, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000187; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Internet Explorer 3.03"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"MSIE 3.03"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os windows, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000188; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Internet Explorer 4.0"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"MSIE 4.0"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os windows, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000189; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Internet Explorer 4.01"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"MSIE 4.01"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os windows, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000190; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Internet Explorer 5.0"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"MSIE 5.0"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os windows, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000191; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Internet Explorer 5.0b1"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"MSIE 5.0b1"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os windows, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000192; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Internet Explorer 5.01"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"MSIE 5.01"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os windows, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000193; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Internet Explorer 5.05"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"MSIE 5.05"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os windows, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000194; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Internet Explorer 5.12"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"MSIE 5.12"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os windows, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000195; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Internet Explorer 5.13"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"MSIE 5.13"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os windows, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000196; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Internet Explorer 5.14"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"MSIE 5.14"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os windows, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000197; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Internet Explorer 5.15"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"MSIE 5.15"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os windows, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000198; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Internet Explorer 5.16"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"MSIE 5.16"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os windows, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000199; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Internet Explorer 5.17"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"MSIE 5.17"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os windows, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000200; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Internet Explorer 5.2"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"MSIE 5.2"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os windows, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000201; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Internet Explorer 5.21"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"MSIE 5.21"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os windows, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000202; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Internet Explorer 5.22"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"MSIE 5.22"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os windows, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000203; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Internet Explorer 5.23"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"MSIE 5.23"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os windows, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000204; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Internet Explorer 5.50"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"MSIE 5.50"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os windows, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000205; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Internet Explorer 5.5b1"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"MSIE 5.5b1"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os windows, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000206; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Internet Explorer 6.0"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"MSIE 6.0"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os windows, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000207; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Internet Explorer 6.0b"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"MSIE 6.0b"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os windows, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000208; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Internet Explorer 6.01"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"MSIE 6.01"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os windows, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000209; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Internet Explorer 6.1"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"MSIE 6.1"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os windows, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000210; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Internet Explorer 7.0"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"MSIE 7.0"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os windows, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000211; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Internet Explorer 7.0b"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"MSIE 7.0b"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os windows, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000212; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Internet Explorer 8.0"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"MSIE 8.0"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os windows, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000213; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Internet Explorer 9.0"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"MSIE 9.0"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os windows, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000214; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Internet Explorer 10.0"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"MSIE 10.0"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os windows, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000215; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Internet Explorer 10.6"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"MSIE 10.6"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os windows, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000216; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Internet Explorer 11"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"MSIE 11"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os windows, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000217; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Opera 9.80"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"Opera/9.80"; content: !"Version"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000218; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Opera 12.14"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"Opera"; content: "12.14"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000219; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Opera 12.02"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"Opera"; content: "12.02"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000220; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Opera 12.00"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"Opera"; content: "12.00"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000221; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Opera 12.16"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"Opera"; content: "12.16"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000222; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Opera 11.62"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"Opera"; content: "11.62"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000223; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Opera 11.52"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"Opera"; content: "11.52"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:1100024; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Opera 11.51"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"Opera"; content: "11.51"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000225; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Opera 11.50"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"Opera"; content: "11.50"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000226; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Opera 11.11"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"Opera"; content: "11.11"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000227; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Opera 11.10"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"Opera"; content: "11.10"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000228; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Opera 11.01"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"Opera"; content: "11.01"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000229; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Opera 11.00"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"Opera"; content: "11.00"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000230; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Opera 10.70"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"Opera"; content: "10.70"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000231; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Opera 10.63"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"Opera"; content: "10.63"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000232; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Opera 10.62"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"Opera"; content: "10.62"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000233; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Opera 10.61"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"Opera"; content: "10.61"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000234; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Opera 10.60"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"Opera"; content: "10.60"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000235; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Opera 10.54"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"Opera"; content: "10.54"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000236; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Opera 10.53"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"Opera"; content: "10.53"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000237; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Opera 10.52"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"Opera"; content: "10.52"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000238; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Opera 11.52"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"Opera"; content: "11.52"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000239; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Opera 10.51"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"Opera"; content: "10.51"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000240; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Opera 10.50"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"Opera"; content: "10.50"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000241; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Opera 10.10"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"Opera"; content: "10.10"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000242; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Opera 10.01"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"Opera"; content: "10.01"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000243; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Opera 10.00"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"Opera"; content: "10.00"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000244; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Opera 9.99"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"Opera"; content: "9.99"; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000245; rev:1;)
+
+alert ip $HOME_NET any -> any any (msg:"Thunderbird 38"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"Thunderbird/38"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os windows, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000246; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy S8 Lite"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-G8750"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000247; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy Note10 5G"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-N971N"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000248; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy Note10+"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-N975"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000249; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy Note10+ 5G"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-N976"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000250; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy Note10"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-N970"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000251; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy Tab S6"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-T86"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000252; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy A90 5G"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-A908N"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000253; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy J5 2017"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-J530F"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000254; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy A30S"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-A307"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000255; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy A50S"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-A507FN"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000256; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy S10e"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-G970"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000257; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy A7 2018"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-A750"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000258; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy J6+"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-J610"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000259; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy On7 2018"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-G611"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000260; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy J6"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-J600"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000261; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy A70"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-A705"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000262; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy A8s"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-G887"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000263; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy Note FE"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-N935"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000264; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy A9 Pro"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-G887N"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000265; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy A50"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-A505"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000266; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy Xcover4"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-G390F"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000267; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung W2018"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-W2018"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000268; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy Tab A 10.5"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-T59"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000269; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy J4+"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-J415"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000270; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy A8+ 2018"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-A730F"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000271; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy J8"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-J810"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000272; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy A20e"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-A202"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000273; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy A10"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-A105"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000274; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy Tab A 8 Plus 2019"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-P200"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000275; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy A30"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-A305"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000276; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy A8 2018"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-A530"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000277; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy A40"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-A405"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000278; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy J4"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-J400"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000279; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy A60"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-A606"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000280; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy A6+"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-A605"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000281; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy J7 Duo"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-J720"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000282; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy J3 2017"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-J330"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000283; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy J7 Neo"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-J701"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000284; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy A8 Star"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-G885"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000285; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy Tab A Plus 8inch 2019"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-P205"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000286; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy A80"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-A805"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000287; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy A9 2018"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-A920"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000288; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy A6"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-A600"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000289; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy S10"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-G973"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000290; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy Tab S4"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-T83"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000291; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy S8 Active"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-G892"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000292; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy J7 Top"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-J737"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000293; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy Fold"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-F90"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000294; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy S10 5G"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-G977"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000295; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy Tab Active 2"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-T395"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000296; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy J7 2017"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-J730"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000297; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy A20"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-A205"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000298; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy Tab A 8 2017"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-T380"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000299; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy S10+"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-G975"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000300; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy Tab S5e"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-T72"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000301; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy A10e"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-A102U"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000302; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy Tab A 10.1 2019"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-T51"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000303; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy M10S"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-M107Fv"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000304; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy Tab S3"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-T825"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000305; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy S9+"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-G965"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000306; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy S8+"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-G955"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000307; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy S8"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-G950"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000308; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy Note8"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-N950"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000309; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy S9"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-G960"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000310; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy Note9"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-N960"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000311; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy Tab E 8"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-T378V"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000312; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy J5 2017"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-J530"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000313; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy J7 2016"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-J710"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000314; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy View2"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-T927A"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000315; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy Tab A 8 2018"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-T387"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000316; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy On7 2016"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-G610"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000317; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy J2 Core"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-J260"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000318; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy J7 Pop"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-J727"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000319; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy Tab A 8 inch"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-T387W"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000320; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy Tab Active 2"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-T39"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000321; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy Tab A 8 2017"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-T38"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000323; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy J7 Max"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-G615F"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000324; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy Tab A 10.1 with S-Pen"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-P58"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000325; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy Xcover4"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-G390"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000326; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy Tab A 10.5"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-T59"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000327; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy Tab A 10.1 Plus 2016"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-P58"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000328; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy J3 Pop"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-J327"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000329; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy A3 2017"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-A720"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000330; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy A7 2017"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-G8750"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000331; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy C7"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-C7000"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000332; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy S7 Edge"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-G935"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000333; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy S7"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-G930"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000334; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy Tab S3"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-T82"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000335; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Samsung Galaxy Tab4 7"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content:"SM-T230NZ"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_os android, fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000336; rev:1;)
+
+alert http $HOME_NET any -> any any (msg:"Google Chrome Version 78"; flow:established,to_server; content:"User-Agent|3a| "; nocase; http_header; content: "Chrome/78"; nocase; threshold: type limit, track by_src, seconds 3600, count 1; target: src_ip; metadata: fingerprint_type client, fingerprint_expire 86400; classtype:fingerprint; sid:11000337; rev:1;)
